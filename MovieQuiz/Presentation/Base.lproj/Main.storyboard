@@ -26,7 +26,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qOI-OO-ibu">
-                                <rect key="frame" x="20" y="54" width="374" height="832.66666666666663"/>
+                                <rect key="frame" x="20" y="54" width="374" height="808"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fet-Qf-T4x">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="23.666666666666668"/>
@@ -51,12 +51,17 @@
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="iPj-NX-UDf" secondAttribute="height" multiplier="2:3" id="RhM-3d-zCt"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dBh-zo-jE9">
-                                        <rect key="frame" x="0.0" y="624.66666666666663" width="374" height="128"/>
+                                        <rect key="frame" x="0.0" y="624.66666666666663" width="374" height="103.33333333333337"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0mS-Oa-Wsj" userLabel="Question Label">
-                                                <rect key="frame" x="42" y="13" width="290" height="102"/>
+                                                <rect key="frame" x="42" y="13" width="290" height="90.333333333333329"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                                 <color key="textColor" name="White"/>
                                                 <nil key="highlightedColor"/>
@@ -65,12 +70,12 @@
                                         <constraints>
                                             <constraint firstItem="0mS-Oa-Wsj" firstAttribute="top" secondItem="dBh-zo-jE9" secondAttribute="top" constant="13" id="2DD-e8-264"/>
                                             <constraint firstItem="0mS-Oa-Wsj" firstAttribute="leading" secondItem="dBh-zo-jE9" secondAttribute="leading" constant="42" id="SHk-Qg-Z6F"/>
-                                            <constraint firstAttribute="bottom" secondItem="0mS-Oa-Wsj" secondAttribute="bottom" constant="13" id="YPb-ek-KWM"/>
+                                            <constraint firstAttribute="bottom" secondItem="0mS-Oa-Wsj" secondAttribute="bottom" id="YPb-ek-KWM"/>
                                             <constraint firstAttribute="trailing" secondItem="0mS-Oa-Wsj" secondAttribute="trailing" constant="42" id="qrD-Bi-xg1"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="D5S-gC-rJs">
-                                        <rect key="frame" x="0.0" y="772.66666666666663" width="374" height="60"/>
+                                        <rect key="frame" x="0.0" y="748" width="374" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iGv-Pg-8H2">
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
@@ -87,7 +92,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="ButtonNoDidTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gR6-GD-NVe"/>
+                                                    <action selector="noButtonDidTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qta-rQ-X6M"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vs7-rm-xts">
@@ -105,7 +110,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="ButtonYesDidTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gcd-zj-we6"/>
+                                                    <action selector="yesButtonDidTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3Nn-ai-s0D"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -117,19 +122,20 @@
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="Black"/>
                         <constraints>
                             <constraint firstItem="qOI-OO-ibu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="35b-qD-4bf"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qOI-OO-ibu" secondAttribute="trailing" constant="20" id="8Fa-aU-28g"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qOI-OO-ibu" secondAttribute="bottom" id="Cht-nt-TfC"/>
                             <constraint firstItem="qOI-OO-ibu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="Yaf-0k-xSL"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="ButtonNo" destination="iGv-Pg-8H2" id="x73-Ea-oOo"/>
-                        <outlet property="ButtonYes" destination="vs7-rm-xts" id="scp-Cc-6Fl"/>
                         <outlet property="counterLabel" destination="bFH-HY-2db" id="U01-6c-Ydp"/>
                         <outlet property="imageView" destination="iPj-NX-UDf" id="A4q-qR-MpV"/>
+                        <outlet property="noButton" destination="iGv-Pg-8H2" id="GL9-aR-hpv"/>
                         <outlet property="textLabel" destination="0mS-Oa-Wsj" id="Pvv-zu-HnA"/>
+                        <outlet property="yesButton" destination="vs7-rm-xts" id="VhI-DH-PiV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -138,6 +144,9 @@
         </scene>
     </scenes>
     <resources>
+        <namedColor name="Black">
+            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="White">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
