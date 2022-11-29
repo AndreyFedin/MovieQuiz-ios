@@ -8,6 +8,11 @@
 import Foundation
 
 class QuestionFactory: QuestionFactoryProtocol {
+
+    questionFactory = QuestionFactory()
+    questionFactory.delegate = self
+    
+    weak var delegate: QuestionFactoryDelegate?
     
     func requestNextQuestion() -> QuizQuestion? {
         guard let index = (0..<questions.count).randomElement() else {
