@@ -24,6 +24,9 @@
 		CE172B872936A4A4003F26AA /* QuestionFactoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE172B862936A4A4003F26AA /* QuestionFactoryDelegate.swift */; };
 		CE54A29C29214F5000F19075 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA5EBCA291E3C4600C59F33 /* YS Display-Medium.ttf */; };
 		CE54A29D29214F5500F19075 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA5EBC9291E3C4600C59F33 /* YS Display-Bold.ttf */; };
+		CE7FBA492939F54D0014CADD /* QuizAlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7FBA482939F54D0014CADD /* QuizAlertModel.swift */; };
+		CE7FBA4B2939F5E30014CADD /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7FBA4A2939F5E30014CADD /* AlertPresenter.swift */; };
+		CE7FBA4D2939F66A0014CADD /* AlertPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7FBA4C2939F66A0014CADD /* AlertPresenterProtocol.swift */; };
 		CEA5EBCC291E42D100C59F33 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA5EBCB291E42D100C59F33 /* UIColor.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +48,9 @@
 		CE172B80293690B2003F26AA /* QuizQuestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizQuestion.swift; sourceTree = "<group>"; };
 		CE172B822936977D003F26AA /* QuestionFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactoryProtocol.swift; sourceTree = "<group>"; };
 		CE172B862936A4A4003F26AA /* QuestionFactoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactoryDelegate.swift; sourceTree = "<group>"; };
+		CE7FBA482939F54D0014CADD /* QuizAlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizAlertModel.swift; sourceTree = "<group>"; };
+		CE7FBA4A2939F5E30014CADD /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
+		CE7FBA4C2939F66A0014CADD /* AlertPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenterProtocol.swift; sourceTree = "<group>"; };
 		CEA5EBC9291E3C4600C59F33 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
 		CEA5EBCA291E3C4600C59F33 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
 		CEA5EBCB291E42D100C59F33 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -66,6 +72,7 @@
 			children = (
 				AD1ABAB52831907B00B3E448 /* MovieQuizViewController.swift */,
 				AD1ABAB72831907B00B3E448 /* Main.storyboard */,
+				CE7FBA4A2939F5E30014CADD /* AlertPresenter.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -145,6 +152,7 @@
 				CE172B7929368DB1003F26AA /* QuestionFactory.swift */,
 				CE172B822936977D003F26AA /* QuestionFactoryProtocol.swift */,
 				CE172B862936A4A4003F26AA /* QuestionFactoryDelegate.swift */,
+				CE7FBA4C2939F66A0014CADD /* AlertPresenterProtocol.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -155,6 +163,7 @@
 				CE172B7C29369090003F26AA /* QuizStepViewModel.swift */,
 				CE172B7E293690A1003F26AA /* QuizResultsViewModel.swift */,
 				CE172B80293690B2003F26AA /* QuizQuestion.swift */,
+				CE7FBA482939F54D0014CADD /* QuizAlertModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -259,9 +268,12 @@
 				AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */,
 				CE172B7F293690A1003F26AA /* QuizResultsViewModel.swift in Sources */,
 				CE172B7D29369090003F26AA /* QuizStepViewModel.swift in Sources */,
+				CE7FBA492939F54D0014CADD /* QuizAlertModel.swift in Sources */,
+				CE7FBA4B2939F5E30014CADD /* AlertPresenter.swift in Sources */,
 				CE172B872936A4A4003F26AA /* QuestionFactoryDelegate.swift in Sources */,
 				CEA5EBCC291E42D100C59F33 /* UIColor.swift in Sources */,
 				AD7AFA552836189F00399704 /* Array+Extensions.swift in Sources */,
+				CE7FBA4D2939F66A0014CADD /* AlertPresenterProtocol.swift in Sources */,
 				CE172B832936977D003F26AA /* QuestionFactoryProtocol.swift in Sources */,
 				CE172B81293690B2003F26AA /* QuizQuestion.swift in Sources */,
 				AD1ABAB62831907B00B3E448 /* MovieQuizViewController.swift in Sources */,
