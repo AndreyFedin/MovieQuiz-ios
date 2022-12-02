@@ -20,7 +20,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         self.imageView.layer.cornerRadius = 20
         questionFactory = QuestionFactory(delegate: self)
-        questionFactory?.requestNextQuestion()
+        self.questionFactory?.requestNextQuestion()
     }
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
@@ -73,7 +73,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let self = self else { return }
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
-            questionFactory?.requestNextQuestion()
+            self.questionFactory?.requestNextQuestion()
         }
         
         alert.addAction(action)
@@ -111,10 +111,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 title: "Этот раунд окончен!",
                 text: text,
                 buttonText: "Сыграть ещё раз")
-            show(quiz: viewModel)
+            self.show(quiz: viewModel)
         } else {
             currentQuestionIndex += 1
-            questionFactory?.requestNextQuestion()
+            self.questionFactory?.requestNextQuestion()
         }
     }
 }
