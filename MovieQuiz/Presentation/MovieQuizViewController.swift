@@ -21,7 +21,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // В Swift вы можете объявлять свои типы ошибок,
     // подписывать их под протокол Error и использовать
     // для описания нестандартного поведения кода
-    enum FileManagerError: Error {
+    private enum FileManagerError: Error {
         case fileDoesntExist
     }
     
@@ -148,8 +148,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.showNextQuestionOrResults()
+            self?.showNextQuestionOrResults()
         }
     }
     

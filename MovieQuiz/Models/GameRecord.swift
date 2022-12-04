@@ -13,10 +13,6 @@ struct GameRecord: Codable {
     let date: Date //дата прохождения квиза
     
     func compare(source cmpr: GameRecord) -> Bool {
-        if (self.correct < cmpr.correct){
-            return true
-        } else {
-            return false
-        }
+        self.correct < cmpr.correct
     }
 }
