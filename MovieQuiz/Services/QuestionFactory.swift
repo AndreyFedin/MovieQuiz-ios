@@ -7,12 +7,16 @@
 
 import Foundation
 
-class QuestionFactory: QuestionFactoryProtocol {
+final class QuestionFactory: QuestionFactoryProtocol {
     
     private let moviesLoader: MoviesLoading
     private var movies: [MostPopularMovie] = []
     
     weak private var delegate: QuestionFactoryDelegate?
+    
+    private enum errorURL: Error {
+        case errorurl
+    }
     
     init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
         self.moviesLoader = moviesLoader
@@ -25,8 +29,12 @@ class QuestionFactory: QuestionFactoryProtocol {
                 guard let self = self else { return }
                 switch result {
                 case .success(let mostPopularMovies):
-                    self.movies = mostPopularMovies.items
-                    self.delegate?.didLoadDataFromServer()
+                    if mostPopularMovies.errorMessage.isEmpty {
+                        self.movies = mostPopularMovies.items
+                        self.delegate?.didLoadDataFromServer() }
+                    else {
+                        self.delegate?.didFailToLoadData(with: errorURL.errorurl)
+                    }
                 case .failure(let error):
                     self.delegate?.didFailToLoadData(with: error)
                 }
