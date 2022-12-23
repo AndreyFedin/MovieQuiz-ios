@@ -12,27 +12,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var alert: AlertPresenterProtocol?
     private var statisticService: StatisticService?
     
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var noButton: UIButton!
-    
-    // В Swift вы можете объявлять свои типы ошибок,
-    // подписывать их под протокол Error и использовать
-    // для описания нестандартного поведения кода
-    private enum FileManagerError: Error {
-        case fileDoesntExist
-    }
-    
-    // Заведём отдельную функцию, которая будет возвращать строку,
-    // читая файл, находящийся по передаваемому адресу
-    private func string(from documentsURL: URL) throws -> String {
-        if !FileManager.default.fileExists(atPath: documentsURL.path) {
-            throw FileManagerError.fileDoesntExist
-        }
-        return try String(contentsOf: documentsURL)
-    }
     
     struct Actor: Codable {
         let id: String
@@ -59,35 +44,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // работа с файлом
-        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let jsonFile = "top250MoviesIMDB.json"
-        documentsURL.appendPathComponent(jsonFile)
-        
-        var jsonString: String = ""
-        
-        do {
-            jsonString = try string(from: documentsURL)
-        } catch FileManagerError.fileDoesntExist {
-            print("Файл по адресу \(documentsURL.path) не существует")
-        } catch {
-            print("Неизвестная ошибка чтения из файла \(error)")
-        }
-        
-        let data = jsonString.data(using: .utf8)!
-        
-        do {
-            let result = try JSONDecoder().decode(Top.self, from: data)
-        } catch {
-            print("Failed to parse: \(jsonString)")
-        }
-        // end работа с файлом
-        
         self.imageView.layer.cornerRadius = 20
-        questionFactory = QuestionFactory(delegate: self)
-        self.questionFactory?.requestNextQuestion()
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        questionFactory?.loadData()
+        
         alert = AlertPresenter(controller: self)
         statisticService = StatisticServiceImplementation()
+        
+        showLoadingIndicator()
     }
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
@@ -132,7 +96,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+            image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
         )
@@ -176,4 +140,34 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.questionFactory?.requestNextQuestion()
         }
     }
+    
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
+        activityIndicator.startAnimating() // включаем анимацию
+    }
+    
+    private func hideLoadingIndicator() {
+        activityIndicator.isHidden = true // говорим, что индикатор загрузки скрыт
+        questionFactory?.requestNextQuestion()
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator() // скрываем индикатор загрузки
+        
+        let alertModel = QuizAlertModel(
+            title: "Ошибка",
+            message: message,
+            buttonText: "Попробовать еще раз") {}
+        
+        alert?.showAlert(result: alertModel)
+    }
+    
+    func didLoadDataFromServer() {
+        hideLoadingIndicator()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
+    }
+    
 }
