@@ -26,6 +26,7 @@ class AlertPresenter: AlertPresenterProtocol {
             style: .default, handler: {_ in result.completion() }
         )
         
+        alert.view.accessibilityIdentifier = "Finish Alert"
         alert.addAction(action)
         controller?.present(alert, animated: true, completion: nil )
     }
