@@ -2,13 +2,12 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
-    private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
-    
-    private let questionsAmount: Int = 10
+
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     
+    private let presenter = MovieQuizPresenter()
     private var alert: AlertPresenterProtocol?
     private var statisticService: StatisticService?
     
@@ -18,28 +17,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var noButton: UIButton!
-    
-    struct Actor: Codable {
-        let id: String
-        let image: String
-        let name: String
-        let asCharacter: String
-    }
-    struct Movie: Codable {
-        let id: String
-        let rank: String
-        let title: String
-        let fullTitle: String
-        let year: String
-        let image: String
-        let crew: String
-        let imDbRating: String
-        let imDbRatingCount: String
-    }
-    
-    struct Top: Decodable {
-        let items: [Movie]
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +37,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
         
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         show(quiz: viewModel)
     }
     
@@ -94,14 +71,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         noButton.isEnabled = true
     }
     
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        return QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(),
-            question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
-        )
-    }
-    
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
@@ -117,26 +86,25 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questionsAmount - 1 {
-            
-            statisticService?.store(correct: correctAnswers, total: questionsAmount)
+        if presenter.isLastQuestion() {
+            statisticService?.store(correct: correctAnswers, total: presenter.questionsAmount)
             guard let gamesCount = statisticService?.gamesCount else {return}
             guard let bestGame = statisticService?.bestGame else {return}
             guard let totalAccuracy = statisticService?.totalAccuracy else {return}
             
-            let text = "Ваш результат: \(correctAnswers)/\(questionsAmount)\nКоличество сыгранных квизов: \(gamesCount)\nРекорд: \(bestGame.correct)/\(bestGame.total) \(bestGame.date.dateTimeString) \nСредняя точность: \(String(format: "%.2f", totalAccuracy))%"
+            let text = "Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)\nКоличество сыгранных квизов: \(gamesCount)\nРекорд: \(bestGame.correct)/\(bestGame.total) \(bestGame.date.dateTimeString) \nСредняя точность: \(String(format: "%.2f", totalAccuracy))%"
             
             let alertModel = QuizAlertModel(
                 title: "Этот раунд окончен!",
                 message: text,
                 buttonText: "Сыграть ещё раз") {
-                    self.currentQuestionIndex = 0
+                    self.presenter.resetQuestionIndex()
                     self.correctAnswers = 0
                     self.questionFactory?.requestNextQuestion()
                 }
             alert?.showAlert(result: alertModel)
         } else {
-            currentQuestionIndex += 1
+            presenter.switchToNextQuestion()
             self.questionFactory?.requestNextQuestion()
         }
     }
@@ -153,6 +121,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNetworkError(message: String) {
         hideLoadingIndicator() // скрываем индикатор загрузки
+        self.presenter.resetQuestionIndex()
+        self.correctAnswers = 0
         
         let alertModel = QuizAlertModel(
             title: "Ошибка",
