@@ -14,19 +14,32 @@ final class MovieQuizPresenter {
     var currentQuestion: QuizQuestion?
     weak var viewController: MovieQuizViewController?
     
-    func yesButtonDidTap() {
-        guard let currentQuestion = currentQuestion else {
+    func didRecieveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
             return
         }
-        let givenAnswer = true
-        viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.show(quiz: viewModel)
+        }
+    }
+    
+    func yesButtonDidTap() {
+        didAnswer(isYes: true)
     }
     
     func noButtonDidTap() {
+        didAnswer(isYes: false)
+    }
+    
+    private func didAnswer(isYes: Bool) {
         guard let currentQuestion = currentQuestion else {
             return
         }
-        let givenAnswer = false
+        
+        let givenAnswer = isYes
         viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     

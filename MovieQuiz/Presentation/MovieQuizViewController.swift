@@ -5,7 +5,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var correctAnswers: Int = 0
     
     private var questionFactory: QuestionFactoryProtocol?
-    private var currentQuestion: QuizQuestion?
     
     private let presenter = MovieQuizPresenter()
     private var alert: AlertPresenterProtocol?
@@ -33,29 +32,21 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else {
-            return
-        }
-        
-        currentQuestion = question
-        let viewModel = presenter.convert(model: question)
-        show(quiz: viewModel)
+        presenter.didRecieveNextQuestion(question: question)
     }
     
     @IBAction func yesButtonDidTap(_ sender: UIButton) {
         yesButton.isEnabled = false
-        presenter.currentQuestion = currentQuestion
         presenter.yesButtonDidTap()
     }
     
     @IBAction func noButtonDidTap(_ sender: UIButton) {
         noButton.isEnabled = false
-        presenter.currentQuestion = currentQuestion
         presenter.noButtonDidTap()
     }
     
     
-    private func show(quiz step: QuizStepViewModel) {
+    func show(quiz step: QuizStepViewModel) {
         imageView.layer.borderWidth = 0
         
         imageView.image = step.image
