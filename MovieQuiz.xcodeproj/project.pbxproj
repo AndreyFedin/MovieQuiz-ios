@@ -38,6 +38,7 @@
 		CEDB10E3295381820057719E /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDB10E2295381820057719E /* NetworkClient.swift */; };
 		CEDB10E5295383090057719E /* MostPopularMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDB10E4295383080057719E /* MostPopularMovies.swift */; };
 		CEDB10E72953836C0057719E /* MoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDB10E62953836C0057719E /* MoviesLoader.swift */; };
+		CEEF81282961A665001ACA55 /* AlertPresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEF81272961A665001ACA55 /* AlertPresenterDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 		CEDB10E2295381820057719E /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		CEDB10E4295383080057719E /* MostPopularMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MostPopularMovies.swift; sourceTree = "<group>"; };
 		CEDB10E62953836C0057719E /* MoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesLoader.swift; sourceTree = "<group>"; };
+		CEEF81272961A665001ACA55 /* AlertPresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenterDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 				CE7FBA4C2939F66A0014CADD /* AlertPresenterProtocol.swift */,
 				CEAB591D293B956100C5E5EA /* StatisticService.swift */,
 				CE4886D5293B9D0700676B77 /* StatisticServiceProtocol.swift */,
+				CEEF81272961A665001ACA55 /* AlertPresenterDelegate.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -407,6 +410,7 @@
 			files = (
 				CE4886D6293B9D0700676B77 /* StatisticServiceProtocol.swift in Sources */,
 				CE4886D8293B9D4A00676B77 /* GameRecord.swift in Sources */,
+				CEEF81282961A665001ACA55 /* AlertPresenterDelegate.swift in Sources */,
 				CE172B7A29368DB1003F26AA /* QuestionFactory.swift in Sources */,
 				AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */,
 				CE172B7F293690A1003F26AA /* QuizResultsViewModel.swift in Sources */,

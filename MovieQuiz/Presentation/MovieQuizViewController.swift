@@ -1,13 +1,13 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
     
     private var correctAnswers: Int = 0
     
     private var questionFactory: QuestionFactoryProtocol?
     
     private let presenter = MovieQuizPresenter()
-    private var alert: AlertPresenterProtocol?
+    private var alertPresenter: AlertPresenter?
     private var statisticService: StatisticService?
     
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
@@ -24,7 +24,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
         
-        alert = AlertPresenter(controller: self)
+        alertPresenter = AlertPresenter()
+        alertPresenter?.delegate = self
         statisticService = StatisticServiceImplementation()
         
         presenter.viewController = self
@@ -45,6 +46,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         presenter.noButtonDidTap()
     }
     
+    // MARK: - AlertPresenterDelegate
+    func didPresentAlert(alert: UIAlertController?) {
+        guard let alert = alert else {
+            return
+        }
+        DispatchQueue.main.async {[weak self] in
+        self?.present(alert, animated: true, completion: nil)
+        }
+    }
     
     func show(quiz step: QuizStepViewModel) {
         imageView.layer.borderWidth = 0
@@ -88,7 +98,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                     self.correctAnswers = 0
                     self.questionFactory?.requestNextQuestion()
                 }
-            alert?.showAlert(result: alertModel)
+            alertPresenter?.showAlert(result: alertModel)
         } else {
             presenter.switchToNextQuestion()
             self.questionFactory?.requestNextQuestion()
@@ -115,7 +125,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             message: message,
             buttonText: "Попробовать еще раз") {}
         
-        alert?.showAlert(result: alertModel)
+        alertPresenter?.showAlert(result: alertModel)
     }
     
     func didLoadDataFromServer() {
