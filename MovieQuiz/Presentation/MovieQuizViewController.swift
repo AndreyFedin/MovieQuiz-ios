@@ -1,10 +1,8 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
+final class MovieQuizViewController: UIViewController {
     
     private var presenter: MovieQuizPresenter!
-    private var alertPresenter: AlertPresenter?
-    private var statisticService: StatisticService = StatisticServiceImplementation()
     
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private var imageView: UIImageView!
@@ -18,8 +16,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
         
         self.imageView.layer.cornerRadius = 20
         presenter = MovieQuizPresenter(viewController: self)
-        alertPresenter = AlertPresenter()
-        alertPresenter?.delegate = self
+        
     }
     
     @IBAction func yesButtonDidTap(_ sender: UIButton) {
@@ -30,16 +27,6 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
     @IBAction func noButtonDidTap(_ sender: UIButton) {
         noButton.isEnabled = false
         presenter.noButtonDidTap()
-    }
-    
-    // MARK: - AlertPresenterDelegate
-    func didPresentAlert(alert: UIAlertController?) {
-        guard let alert = alert else {
-            return
-        }
-        DispatchQueue.main.async {[weak self] in
-            self?.present(alert, animated: true, completion: nil)
-        }
     }
     
     func show(quiz step: QuizStepViewModel) {
@@ -53,21 +40,10 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
         noButton.isEnabled = true
     }
     
-    func showAnswerResult(isCorrect: Bool) {
-        if isCorrect {
-            presenter.didAnswer(isCorrect: true)
-        }
-        
+    func highlightImageBorder(isCorrectAnswer: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
-        imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.presenter.statisticService = self.statisticService
-            self.presenter.alertPresenter = self.alertPresenter
-            self.presenter.showNextQuestionOrResults()
-        }
+        imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
     }
     
     func showLoadingIndicator() {
@@ -88,6 +64,6 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
             message: message,
             buttonText: "Попробовать еще раз") {}
         
-        alertPresenter?.showAlert(result: alertModel)
+        self.presenter.alertPresenter?.showAlert(result: alertModel)
     }
 }
