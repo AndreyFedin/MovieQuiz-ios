@@ -1,10 +1,8 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterDelegate {
+final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
     
-    private let presenter = MovieQuizPresenter()
-    
-    private var questionFactory: QuestionFactoryProtocol?
+    private var presenter: MovieQuizPresenter!
     private var alertPresenter: AlertPresenter?
     private var statisticService: StatisticService = StatisticServiceImplementation()
     
@@ -19,18 +17,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         super.viewDidLoad()
         
         self.imageView.layer.cornerRadius = 20
-        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
-        questionFactory?.loadData()
-        
+        presenter = MovieQuizPresenter(viewController: self)
         alertPresenter = AlertPresenter()
         alertPresenter?.delegate = self
-        
-        presenter.viewController = self
-        showLoadingIndicator()
-    }
-    
-    func didRecieveNextQuestion(question: QuizQuestion?) {
-        presenter.didRecieveNextQuestion(question: question)
     }
     
     @IBAction func yesButtonDidTap(_ sender: UIButton) {
@@ -76,25 +65,23 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             self.presenter.statisticService = self.statisticService
-            self.presenter.questionFactory = self.questionFactory
             self.presenter.alertPresenter = self.alertPresenter
             self.presenter.showNextQuestionOrResults()
         }
     }
     
-    private func showLoadingIndicator() {
+    func showLoadingIndicator() {
         activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
         activityIndicator.startAnimating() // включаем анимацию
     }
     
-    private func hideLoadingIndicator() {
+    func hideLoadingIndicator() {
         activityIndicator.isHidden = true // говорим, что индикатор загрузки скрыт
-        questionFactory?.requestNextQuestion()
     }
     
-    private func showNetworkError(message: String) {
+    func showNetworkError(message: String) {
         hideLoadingIndicator() // скрываем индикатор загрузки
-        self.presenter.resetQuestionIndex()
+        self.presenter.restartGame()
         
         let alertModel = QuizAlertModel(
             title: "Ошибка",
@@ -103,13 +90,4 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         
         alertPresenter?.showAlert(result: alertModel)
     }
-    
-    func didLoadDataFromServer() {
-        hideLoadingIndicator()
-    }
-    
-    func didFailToLoadData(with error: Error) {
-        showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
-    }
-    
 }

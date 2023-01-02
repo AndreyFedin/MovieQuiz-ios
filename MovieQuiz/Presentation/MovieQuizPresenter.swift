@@ -8,18 +8,25 @@
 import UIKit
 import Foundation
 
-final class MovieQuizPresenter {
-    
+final class MovieQuizPresenter: QuestionFactoryDelegate {
     weak var viewController: MovieQuizViewController?
     
     var correctAnswers: Int = 0
-    var questionFactory: QuestionFactoryProtocol?
+    private var questionFactory: QuestionFactoryProtocol?
     var statisticService: StatisticService?
     var alertPresenter: AlertPresenter?
     
-    private let questionsAmount: Int = 5
+    private let questionsAmount: Int = 10
     var currentQuestionIndex: Int = 0
     var currentQuestion: QuizQuestion?
+    
+    init(viewController: MovieQuizViewController) {
+        self.viewController = viewController
+        
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        questionFactory?.loadData()
+        viewController.showLoadingIndicator()
+    }
     
     func showNextQuestionOrResults() {
         if self.isLastQuestion() {
@@ -39,9 +46,7 @@ final class MovieQuizPresenter {
                 title: "Этот раунд окончен!",
                 message: text,
                 buttonText: "Сыграть ещё раз") {
-                    self.resetQuestionIndex()
-                    self.correctAnswers = 0
-                    self.questionFactory?.requestNextQuestion()
+                    self.restartGame()
                 }
             alertPresenter?.showAlert(result: alertModel)
         } else {
@@ -49,7 +54,6 @@ final class MovieQuizPresenter {
             self.questionFactory?.requestNextQuestion()
         }
     }
-    
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
@@ -88,7 +92,7 @@ final class MovieQuizPresenter {
         currentQuestionIndex == questionsAmount - 1
     }
     
-    func resetQuestionIndex() {
+    func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
         questionFactory?.requestNextQuestion()
@@ -104,5 +108,15 @@ final class MovieQuizPresenter {
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
         )
+    }
+    
+    func didLoadDataFromServer() {
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        let message = error.localizedDescription
+        viewController?.showNetworkError(message: message)
     }
 }
