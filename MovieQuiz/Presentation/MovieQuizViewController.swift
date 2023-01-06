@@ -1,7 +1,9 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
+final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
+    
     private var presenter: MovieQuizPresenter!
+    var alertPresenter: AlertPresenter?
     
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private var imageView: UIImageView!
@@ -12,6 +14,9 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        alertPresenter = AlertPresenter()
+        alertPresenter?.delegate = self
         
         self.imageView.layer.cornerRadius = 20
         presenter = MovieQuizPresenter(viewController: self)
@@ -40,9 +45,9 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     func highlightImageBorder(isCorrectAnswer: Bool) {
-        imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 8
-        imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+        self.imageView.layer.masksToBounds = true
+        self.imageView.layer.borderWidth = 8
+        self.imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
     }
     
     func showLoadingIndicator() {
@@ -51,6 +56,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     func hideLoadingIndicator() {
+        activityIndicator.stopAnimating()
         activityIndicator.isHidden = true // говорим, что индикатор загрузки скрыт
     }
     
@@ -63,6 +69,15 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             message: message,
             buttonText: "Попробовать еще раз") {}
         
-        self.presenter.alertPresenter?.showAlert(result: alertModel)
+        self.alertPresenter?.showAlert(result: alertModel)
+    }
+    
+    func didPresentAlert(alert: UIAlertController?) {
+        guard let alert = alert else {
+            return
+        }
+        DispatchQueue.main.async {[weak self] in
+            self?.present(alert, animated: true, completion: nil)
+        }
     }
 }

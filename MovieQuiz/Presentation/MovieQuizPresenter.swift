@@ -8,11 +8,10 @@
 import UIKit
 import Foundation
 
-final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate {
+final class MovieQuizPresenter: QuestionFactoryDelegate {
     private weak var viewController: MovieQuizViewController?
     private var questionFactory: QuestionFactoryProtocol?
     private var statisticService: StatisticService?
-    var alertPresenter: AlertPresenter?
     
     private let questionsAmount: Int = 10
     private var correctAnswers: Int = 0
@@ -20,13 +19,10 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
     private var currentQuestion: QuizQuestion?
     
     init(viewController: MovieQuizViewController) {
-        self.viewController = viewController
         statisticService = StatisticServiceImplementation()
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
-        alertPresenter = AlertPresenter()
-        alertPresenter?.delegate = self
-        viewController.showLoadingIndicator()
+        self.viewController?.showLoadingIndicator()
     }
     
     func proceedToNextQuestionOrResults() {
@@ -39,7 +35,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
                 buttonText: "Сыграть ещё раз") {
                     self.restartGame()
                 }
-            alertPresenter?.showAlert(result: alertModel)
+            viewController?.alertPresenter?.showAlert(result: alertModel)
         } else {
             self.switchToNextQuestion()
             self.questionFactory?.requestNextQuestion()
@@ -75,15 +71,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             self.proceedToNextQuestionOrResults()
-        }
-    }
-    
-    func didPresentAlert(alert: UIAlertController?) {
-        guard let alert = alert else {
-            return
-        }
-        DispatchQueue.main.async {[weak self] in
-            self?.viewController?.present(alert, animated: true, completion: nil)
         }
     }
     

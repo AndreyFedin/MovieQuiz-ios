@@ -8,27 +8,10 @@
 import XCTest
 @testable import MovieQuiz
 
-final class MovieQuizViewControllerProtocolMock: MovieQuizViewControllerProtocol {
-    func show(quiz step: MovieQuiz.QuizStepViewModel) {
-    }
-    
-    func highlightImageBorder(isCorrectAnswer: Bool) {
-    }
-    
-    func showLoadingIndicator() {
-    }
-    
-    func hideLoadingIndicator() {
-    }
-    
-    func showNetworkError(message: String) {
-    }
-}
-
 final class MovieQuizPresenterTests: XCTestCase {
     func testPresenterConvertModel() throws {
-        let viewControllerMock = MovieQuizViewControllerProtocolMock()
-        let sut = MovieQuizPresenter(viewController: viewControllerMock)
+        let viewController = MovieQuizViewController()
+        let sut = MovieQuizPresenter(viewController: viewController)
         
         let emptyData = Data()
         let question = QuizQuestion(image: emptyData, text: "Question Text", correctAnswer: true)
