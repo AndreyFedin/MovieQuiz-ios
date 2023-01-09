@@ -37,7 +37,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                 buttonText: "Сыграть ещё раз") {
                     self.restartGame()
                 }
-            print(alertModel)
             self.alertPresenter?.showAlert(result: alertModel)
         } else {
             self.switchToNextQuestion()
