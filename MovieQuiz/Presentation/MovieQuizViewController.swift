@@ -1,9 +1,8 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
-    
+final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, MovieQuizViewControllerProtocol {
     private var presenter: MovieQuizPresenter!
-    var alertPresenter: AlertPresenter?
+    var alertPresenter: AlertPresenter!
     
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private var imageView: UIImageView!
@@ -15,21 +14,20 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.imageView.layer.cornerRadius = 20
+        
         alertPresenter = AlertPresenter()
         alertPresenter?.delegate = self
         
-        self.imageView.layer.cornerRadius = 20
         presenter = MovieQuizPresenter(viewController: self)
         
     }
     
     @IBAction func yesButtonDidTap(_ sender: UIButton) {
-        yesButton.isEnabled = false
         presenter.yesButtonDidTap()
     }
     
     @IBAction func noButtonDidTap(_ sender: UIButton) {
-        noButton.isEnabled = false
         presenter.noButtonDidTap()
     }
     
@@ -45,9 +43,12 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
     }
     
     func highlightImageBorder(isCorrectAnswer: Bool) {
-        self.imageView.layer.masksToBounds = true
-        self.imageView.layer.borderWidth = 8
-        self.imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
+        self.presenter.alertPresenter = self.alertPresenter
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 8
+        imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
     }
     
     func showLoadingIndicator() {
@@ -56,7 +57,6 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
     }
     
     func hideLoadingIndicator() {
-        activityIndicator.stopAnimating()
         activityIndicator.isHidden = true // говорим, что индикатор загрузки скрыт
     }
     

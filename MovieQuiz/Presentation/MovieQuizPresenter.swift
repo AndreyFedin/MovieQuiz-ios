@@ -9,20 +9,22 @@ import UIKit
 import Foundation
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
-    private weak var viewController: MovieQuizViewController?
+    private var viewController: MovieQuizViewControllerProtocol?
     private var questionFactory: QuestionFactoryProtocol?
     private var statisticService: StatisticService?
+    var alertPresenter: AlertPresenterProtocol?
     
-    private let questionsAmount: Int = 10
+    private let questionsAmount: Int = 3
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
     private var currentQuestion: QuizQuestion?
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
+        self.viewController = viewController
         statisticService = StatisticServiceImplementation()
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
-        self.viewController?.showLoadingIndicator()
+        viewController.showLoadingIndicator()
     }
     
     func proceedToNextQuestionOrResults() {
@@ -35,7 +37,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                 buttonText: "Сыграть ещё раз") {
                     self.restartGame()
                 }
-            viewController?.alertPresenter?.showAlert(result: alertModel)
+            print(alertModel)
+            self.alertPresenter?.showAlert(result: alertModel)
         } else {
             self.switchToNextQuestion()
             self.questionFactory?.requestNextQuestion()
