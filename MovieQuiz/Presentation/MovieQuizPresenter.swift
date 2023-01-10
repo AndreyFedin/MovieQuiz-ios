@@ -14,7 +14,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private var statisticService: StatisticService?
     var alertPresenter: AlertPresenterProtocol?
     
-    private let questionsAmount: Int = 3
+    private let questionsAmount: Int = 10
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
     private var currentQuestion: QuizQuestion?
