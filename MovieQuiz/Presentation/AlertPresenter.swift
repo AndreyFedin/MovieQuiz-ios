@@ -8,11 +8,7 @@
 import UIKit
 
 class AlertPresenter: AlertPresenterProtocol {
-    weak private var controller: UIViewController?
-    
-    init(controller: UIViewController) {
-        self.controller = controller
-    }
+    weak var delegate: AlertPresenterDelegate?
     
     func showAlert(result: QuizAlertModel) {
         let alert = UIAlertController(
@@ -20,14 +16,10 @@ class AlertPresenter: AlertPresenterProtocol {
             message: result.message,
             preferredStyle: .alert
         )
-        
-        let action = UIAlertAction(
-            title: "Сыграть еще раз",
-            style: .default, handler: {_ in result.completion() }
-        )
+        alert.view.accessibilityIdentifier = "Finish Alert"
+        let action = UIAlertAction(title: result.buttonText, style: .default, handler: {_ in result.completion() })
         
         alert.addAction(action)
-        controller?.present(alert, animated: true, completion: nil )
+        delegate?.didPresentAlert(alert: alert)
     }
-    
 }
